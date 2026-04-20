@@ -12,3 +12,22 @@ Python scripts for population genetic analysis of viral ORF5 sequences.
 | `selection_k2p_v12.py` | dN/dS estimation (Nei-Gojobori + K2P correction) |
 
 ## Requirements
+biopython>=1.79
+numpy
+pandas
+scipy
+matplotlib
+tqdm
+
+## Input format
+
+All scripts expect pre-aligned FASTA files with pipe-delimited headers:
+ID | Isolate | Country | Year | Lineage
+## Citation
+
+If you use these scripts, please cite:
+He J-T, Kuo C-H, He J-L (2026) ...（Artical）... DOI: [Zenodo DOI]
+
+## License
+
+MIT License
