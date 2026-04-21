@@ -13,14 +13,14 @@ For each pair of groups the script computes:
 Input:
   A pre-aligned FASTA file whose sequence headers follow the pipe-
   delimited format:
-      ID | Isolate | Country | Year | Lineage
+      ID | Isolate | Geo_loc | Year | Lineage
 
 Output:
   A CSV file containing the full pairwise result table.
 
 Usage:
   1. Set `fasta_file` and `output_fst_matrix` at the bottom of the script.
-  2. Edit `group_conditions` to define your groups (country, year_range,
+  2. Edit `group_conditions` to define your groups (Geo_loc, year_range,
      and/or lineage filters).  Add or remove entries as needed.
   3. Run: python calculate_fst_v7.2.5.py
 """
@@ -42,10 +42,10 @@ np.random.seed(42)
 def parse_fasta(fasta_file):
     """
     Read an aligned FASTA file and return a DataFrame with columns:
-    ID, Isolate, Country, Year, Lineage, Sequence.
+    ID, Isolate, Geo_loc, Year, Lineage, Sequence.
 
     Expected header format (pipe-separated, 5 fields):
-        >ID | Isolate | Country | Year | Lineage
+        >ID | Isolate | Geo_loc | Year | Lineage
     Records with malformed headers are skipped with a warning.
     """
     records = []
@@ -58,7 +58,7 @@ def parse_fasta(fasta_file):
             records.append({
                 "ID":       fields[0],
                 "Isolate":  fields[1],
-                "Country":  fields[2],
+                "Geo_loc":  fields[2],
                 "Year":     int(fields[3]),
                 "Lineage":  fields[4],
                 "Sequence": str(record.seq).upper()
@@ -69,23 +69,23 @@ def parse_fasta(fasta_file):
 
 
 # ---------------------------------------------------------------------------
-# 2. Filter sequences by country, year range, and/or lineage
+# 2. Filter sequences by Geo_loc, year range, and/or lineage
 # ---------------------------------------------------------------------------
 
-def filter_sequences(df, country=None, year_range=None, lineage=None):
+def filter_sequences(df, Geo_loc=None, year_range=None, lineage=None):
     """
     Return a subset of `df` matching all supplied criteria.
 
     Parameters
     ----------
     df         : pd.DataFrame  Full metadata DataFrame from parse_fasta().
-    country    : str or None   Exact match on the 'Country' column.
+    Geo_loc    : str or None   Exact match on the 'Geo_loc' column.
     year_range : tuple or None (min_year, max_year) inclusive.
     lineage    : str or None   Exact match on the 'Lineage' column.
     """
     out = df.copy()
-    if country:
-        out = out[out["Country"] == country]
+    if Geo_loc:
+        out = out[out["Geo_loc"] == Geo_loc]
     if year_range:
         out = out[(out["Year"] >= year_range[0]) & (out["Year"] <= year_range[1])]
     if lineage:
@@ -307,7 +307,7 @@ def main(fasta_file, group_conditions, output_csv=None, n_permutations=1000):
     fasta_file       : str   Path to the aligned FASTA file.
     group_conditions : dict  Mapping of group labels to filter criteria.
                              Each value is a dict with optional keys:
-                             'country', 'year_range', 'lineage'.
+                             'Geo_loc', 'year_range', 'lineage'.
     output_csv       : str or None  Path for the CSV output file.
     n_permutations   : int   Number of permutation replicates (default 1000).
     """
@@ -319,7 +319,7 @@ def main(fasta_file, group_conditions, output_csv=None, n_permutations=1000):
     for name, cond in group_conditions.items():
         groups[name] = filter_sequences(
             df,
-            country    = cond.get("country"),
+            Geo_loc    = cond.get("Geo_loc"),
             year_range = cond.get("year_range"),
             lineage    = cond.get("lineage")
         )
@@ -404,29 +404,29 @@ if __name__ == "__main__":
     # Define groups to compare.
     # Each entry maps a group label to a dict of filter criteria.
     # Available keys (all optional; omit to skip that filter):
-    #   "country"    : str   — exact match on the Country field
+    #   "Geo_loc"    : str   — exact match on the Geo_loc field
     #   "year_range" : tuple — (min_year, max_year) inclusive
     #   "lineage"    : str   — exact match on the Lineage field
     #
     # Add or remove entries as needed.
     group_conditions = {
         "Group1": {
-            "country":    "Country_A",
+            "Geo_loc":    "Geo_loc_A",
             "year_range": (2015, 2024),
             "lineage":    "LineageX"
         },
         "Group2": {
-            "country":    "Country_B",
+            "Geo_loc":    "Geo_loc_B",
             "year_range": (2015, 2024),
             "lineage":    "LineageX"
         },
         "Group3": {
-            "country":    "Country_C",
+            "Geo_loc":    "Geo_loc_C",
             "year_range": (2015, 2024),
             "lineage":    "LineageX"
         },
         "Group4": {
-            "country":    "Country_D",
+            "Geo_loc":    "Geo_loc_D",
             "year_range": (2015, 2024),
             "lineage":    "LineageX"
         },
