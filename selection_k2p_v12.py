@@ -13,7 +13,7 @@ Mann-Whitney U test on per-pair dN/dS distributions.
 Input:
   A pre-aligned FASTA file whose sequence headers follow the pipe-
   delimited format:
-      ID | Isolate | Country | Year | Lineage
+      ID | Isolate | Geo_loc | Year | Lineage
 
 Output:
   - A plain-text results file  (dnds_results_k2p.txt)
@@ -191,7 +191,7 @@ def parse_and_group(fasta_file):
     to lists of sequence strings.
 
     Expected header format (pipe-separated, 5 fields):
-        >ID | Isolate | Country | Year | Lineage
+        >ID | Isolate | Geo_loc | Year | Lineage
     """
     try:
         alignment = AlignIO.read(fasta_file, "fasta")
