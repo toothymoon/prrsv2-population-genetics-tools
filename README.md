@@ -26,7 +26,7 @@ ID | Isolate | Country | Year | Lineage
 ## Citation
 
 If you use these scripts, please cite:
-He J-T, Kuo C-H, He J-L (2026) ...（Artical）... DOI: [Zenodo DOI]
+
 
 ## License
 
