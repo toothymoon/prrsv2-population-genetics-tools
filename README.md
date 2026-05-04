@@ -22,7 +22,7 @@ tqdm
 ## Input format
 
 All scripts expect pre-aligned FASTA files with pipe-delimited headers:
-ID | Isolate | Country | Year | Lineage
+ID | Isolate | Geo_loc | Year | Lineage
 ## Citation
 
 If you use these scripts, please cite:
